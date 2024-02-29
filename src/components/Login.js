@@ -1,12 +1,18 @@
 import React, { useRef, useState } from 'react'
 import Header from './Header'
 import { checkValidData } from '../utils/Validate'
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from '../utils/firebase';
 
 const Login = () => {
     const[isSignInForm, setIsSignInForm]=useState(true);
     const[errorMessage,setErrorMessage]=useState(null);
     const email = useRef(null);
     const password = useRef(null);
+   
 
     const handleToggleForm=()=>{
         setIsSignInForm(!isSignInForm)
@@ -20,6 +26,44 @@ const Login = () => {
         //set the error message!
         setErrorMessage(message)
 
+        if(message){
+          return;
+        }
+        //signIN / SignUP logic
+        if(!isSignInForm){
+          //signUP logic-create user
+          createUserWithEmailAndPassword(
+            auth,
+            email.current.value,
+            password.current.value
+          )
+            .then((userCredential) => {
+              // Signed up
+              const user = userCredential.user;
+              // console.log(user)
+  
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              setErrorMessage(errorCode+ "-"+errorMessage);
+             
+            });
+        }
+        else{
+          //sign
+          signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+              // Signed in
+              const user = userCredential.user;
+              // ...
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              setErrorMessage(errorCode+ "-"+errorMessage)
+            });
+        }
     }
   return (
     <div>
