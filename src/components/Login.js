@@ -7,12 +7,11 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from '../utils/firebase';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
 
 const Login = () => {
-    const navigate = useNavigate()
+    
     const dispatch=useDispatch()
     const[isSignInForm, setIsSignInForm]=useState(true);
     const[errorMessage,setErrorMessage]=useState(null);
@@ -45,17 +44,17 @@ const Login = () => {
             password.current.value
           )
             .then((userCredential) => {
-              // Signed up
+              //Signed up
               const user = userCredential.user;
-              // console.log(user)
+              //console.log(user)
               updateProfile(user, {
                 displayName: name.current.value,
                 photoURL:
                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPfO37MK81JIyR1ptwqr_vYO3w4VR-iC2wqQ&usqp=CAU",
               })
                 .then(() => {
-                  // Profile updated!
-                  // ...
+                  //Profile updated!
+                  //...
                   const { uid, email, displayName, photoURL } = auth.currentUser;
                   dispatch(
                     addUser({
@@ -65,14 +64,14 @@ const Login = () => {
                       photoURL: photoURL,
                     })
                   );
-                  navigate("/browse");
+                 
                 })
                 .catch((error) => {
-                  // An error occurred
-                  // ...
+                  //An error occurred
+                  //...
                   setErrorMessage(error.message);
                 });
-              // console.log(user)
+              //console.log(user)
               
   
             })
@@ -93,7 +92,7 @@ const Login = () => {
             .then((userCredential) => {
               // Signed in
               const user = userCredential.user;
-              navigate("/browse");
+             
               // ...
             })
             .catch((error) => {
